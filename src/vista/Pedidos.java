@@ -2,6 +2,7 @@ package vista;
 
 import controlador.PedidoControlador;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.table.DefaultTableModel;
 import modelo.PedidoModelo;
 
@@ -21,28 +22,30 @@ public class Pedidos extends javax.swing.JInternalFrame {
 
            ArrayList<PedidoModelo> listapedidos = new ArrayList<>();
 
-           public void setModel() {
-        String[] cabecera = {"Nº1.", "Id Pedido", "Cedula Cliente", "Fecha Pedido", "Descripciòn", "Cantidad", "Precio  Total"};
-        model.setColumnIdentifiers(cabecera);
-        tblPostullante.setModel(model);
+          public void setModel() {
+    String[] cabecera = {"Nº", "Id Pedido", "Cedula Cliente", "Fecha Pedido", "Descripción", "Cantidad", "Precio Total"};
+    model.setColumnIdentifiers(cabecera);
+    tblPedido.setModel(model);
+}
 
-    }
+            
          public void setDatos() {
-        Object[] datoFila = new Object[model.getColumnCount()];
-        int nro = 1;
-        
-       
-        for (PedidoModelo puntero : listapedidos) {
-            datoFila[0] = nro;
-            datoFila[1] = puntero.getIdPedido();
-            datoFila[2] = puntero.getIdCliente();
-            datoFila[3] = puntero.getFechaPedido();
-            datoFila[4] = puntero.getDescripcion();
-            datoFila[5] = puntero.getCantidad();
-            datoFila[6] = puntero.getPrecioTotal();
-            nro++;
-            model.addRow(datoFila);
-        }
+    model.setRowCount(0); 
+
+    int nro = 1; 
+
+    for (PedidoModelo pedido : listapedidos) {
+        Object[] datoFila = {
+            nro++, 
+            pedido.getIdPedido(), 
+            pedido.getIdCliente(), 
+            pedido.getFechaPedido(), 
+            pedido.getDescripcion(), 
+            pedido.getCantidad(), 
+            pedido.getPrecioTotal()
+        };
+        model.addRow(datoFila);
+    }
 
     }
            
@@ -63,7 +66,7 @@ public class Pedidos extends javax.swing.JInternalFrame {
         txtCedula = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
-        tblPostullante = new javax.swing.JTable();
+        tblPedido = new javax.swing.JTable();
 
         setClosable(true);
         setIconifiable(true);
@@ -79,19 +82,19 @@ public class Pedidos extends javax.swing.JInternalFrame {
             }
         });
 
-        tblPostullante.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEtchedBorder(java.awt.Color.gray, null), new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true)));
-        tblPostullante.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        tblPostullante.setName("TABLA POSTULANTE"); // NOI18N
-        tblPostullante.addAncestorListener(new javax.swing.event.AncestorListener() {
+        tblPedido.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEtchedBorder(java.awt.Color.gray, null), new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true)));
+        tblPedido.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        tblPedido.setName("TABLA POSTULANTE"); // NOI18N
+        tblPedido.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
-                tblPostullanteAncestorAdded(evt);
+                tblPedidoAncestorAdded(evt);
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
         });
-        jScrollPane4.setViewportView(tblPostullante);
+        jScrollPane4.setViewportView(tblPedido);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -127,18 +130,32 @@ public class Pedidos extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
-                String cedula = txtCedula.getText();
-        PedidoControlador pC = new PedidoControlador();
-        ArrayList<Object[]> listaFilas = pC.buscarPostulante(cedula);
-        for (Object[] listaFila : listaFilas) 
-         listapedidos.add(p);
-        this.setDatos();
+        // TODO add your handling code here:                                                                      
+    String cedula = txtCedula.getText();
+    PedidoControlador pC = new PedidoControlador();
+    ArrayList<Object[]> listaFilas = pC.buscarPedidocedula;
+    listapedidos.clear();
+    for (Object[] listaFila : listaFilas) {
+        PedidoModelo pedido = new PedidoModelo();
+        
+        pedido.setIdPedido((Integer) listaFila[1]);
+        pedido.setIdCliente((int) listaFila[2]);
+        pedido.setFechaPedido((Date) listaFila[3]);
+        pedido.setDescripcion((String) listaFila[4]);
+        pedido.setCantidad((Integer) listaFila[5]);
+        pedido.setPrecioTotal((Double) listaFila[6]);
+
+        listapedidos.add(pedido);
+    }
+
+    this.setDatos();
+
+
     }//GEN-LAST:event_btnBuscarActionPerformed
 
-    private void tblPostullanteAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_tblPostullanteAncestorAdded
+    private void tblPedidoAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_tblPedidoAncestorAdded
         // TODO add your handling code here:
-    }//GEN-LAST:event_tblPostullanteAncestorAdded
+    }//GEN-LAST:event_tblPedidoAncestorAdded
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -149,7 +166,7 @@ public class Pedidos extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jblCedula;
     private javax.swing.JTable tblEmpleador;
     private javax.swing.JTable tblEmpleador1;
-    private javax.swing.JTable tblPostullante;
+    private javax.swing.JTable tblPedido;
     private javax.swing.JTextField txtCedula;
     // End of variables declaration//GEN-END:variables
 }
